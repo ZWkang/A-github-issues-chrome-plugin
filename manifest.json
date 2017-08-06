@@ -1,0 +1,28 @@
+{
+	"name":"issues tab按钮插件",
+	"version":"1.0",
+	"manifest_version": 2,
+	"description": "一些广告屏蔽!!!",
+	"icons":{"16":"icon_16.png","48":"icon_48.png","128":"icon_128.png"},
+	"background": "background.html", 
+	"options_page": "options.html",
+	"content_scripts": [{
+		"matches": [
+			"http://github.com/",
+	 		"https://github.com/",
+	 		"http://github.com/*",
+	 		"https://github.com/*"],
+	 		"js": [
+	 			"./js/index.js"
+	 		]}
+	],
+	"browser_action": {"default_icon": "icon_16.png","default_popup":"./popup.html"},
+	"permissions": [
+	    	"http://github.com/",
+	    	"http://github.com/*",
+	    	"https://github.com/",
+	    	"https://github.com/*",
+	    	"tabs",
+	    	"storage"
+  	]
+  }
