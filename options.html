@@ -12,37 +12,55 @@
 			height: 200px;
 			border: 2px solid #000000;
 			padding: 10px 0px;
-			background-color: #ddd;
-		}
-		#container > h1{
-
-			font-family: 华文行楷;
-			font-size: 46px;
-			color: rgba(41,128,135,0.9);
 			text-align: center;
-		}
-		#container > a{
-			color: rgba(41,128,135,0.9);
-			font-weight: 900;
-			font-size:  36px;
-			text-align: center;
-			display: block;
 		}
 		input[type="text"]{
-			
+			border: 1px solid #DADADA;
+			color: #888;
+			height: 30px;
+			margin-bottom: 16px;
+			margin-right: 6px;
+			margin-top: 2px;
+			outline: 0 none;
+			padding: 1px 1px 3px 0px;
+			width: 70%;
+			font-size: 16px;
+			line-height:15px;
+			box-shadow: inset 0px 1px 4px #ECECEC;
+			-moz-box-shadow: inset 0px 1px 4px #ECECEC;
+			-webkit-box-shadow: inset 0px 1px 4px #ECECEC;
 		}
-		input[type="text"]:focus{
-			border: 1px solid rgba(41,128,135,0.9);
+		input[type="button"]{
+			background: #E27575;
+			border: none;
+			padding: 10px 25px 10px 25px;
+			color: #FFF;
+			box-shadow: 1px 1px 5px #B6B6B6;
+			border-radius: 3px;
+			text-shadow: 1px 1px 1px #9E3F3F;
+			cursor: pointer;
+		}
+		input[type="button"]:hover {
+			background: #CF7A7A
+		}
+		label{
+			font-size: 18px;
+			line-height: 24px;
+			vertical-align: middle;
+			margin-bottom: 5px;
+			display: block;
 		}
 	</style>
 </head>
 <body>
 	
 	<div id="container">
-		<input type="text" id="splitvalue">
+		<label for="splitvalue">set Tab button padding:</label><input type="text" id="splitvalue">
+		<br/>
 		<input type="button" value="save" id="saves">
+		<h3><a href="https://github.com/ZWkang/A-github-issues-chrome-plugin">github地址</a></h3>
 	</div>
 
-
+	
 </body>
 </html>

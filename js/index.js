@@ -3,18 +3,21 @@
 	if(!(/issues\/\w+/.test(location.href))){
 		return false;
 	}
+	var defaultvalue = "\t"
+	chrome.storage.sync.get(null,function(item){
+		defaultvalue = item['value'] || defaultvalue;
+		// console.log(defaultvalue)
+	})
+	chrome.storage.onChanged.addListener(function(changes) {
+		defaultvalue = changes['value']['newValue'];
+		// console.log(changes)
+	});
 	window.addEventListener('load',function(){
 		'use strict';
-		var defaultvalue = "\t"
+		
 		var ele = 'issue_body';
 		var eleObject ;
-		// console.log(location.hostname)
-		chrome.storage.sync.get(null,function(item){
-			item['value'] = defaultvalue;
-		})
-		chrome.storage.onChanged.addListener(function(changes) {
-			defaultvalue = changes['value']['newValue'];
-		});
+
 		if(document.querySelector){
 			eleObject = document.querySelector('#'+ele);
 		}else if(typeof $!==void 0){
@@ -32,41 +35,49 @@
 				ele['on'+type] = callback;
 			}
 		}
-		var arrays = []
+		var arrays = [];
 
 		var defaultcallback = function (e){
 			var e = e||window.e;
 			var keycode = e.keyCode||e.which||e.charCode;
-			var value,start,end,len,selectionvalue,text;
+			var value,start,end,len,selectionvalue,text,valueobj;
 			
 
-			if (e.ctrlKey && e.keyCode==90){
-				e.preventDefault ? e.preventDefault() : event.returnValue = false;
-				eleObject.value = arrays.pop()||'';
-				// console.log(e.ctrlKey)
+			if (e.ctrlKey && e.keyCode ==90){
+				e.preventDefault();
+				valueobj = arrays.pop()||{};
+				eleObject.value = valueobj['value']||'';
+				eleObject.selectionStart = valueobj['start']||0;
+				eleObject.selectionEnd = valueobj['end']||valueobj['start']||0;
 				return false;
 			}
 			if(keycode ===9){
-				e.preventDefault ? e.preventDefault() : event.returnValue = false;
+				// e.preventDefault ? e.preventDefault() : event.returnValue = false;
+				e.preventDefault();
 				start = eleObject.selectionStart;
-				arrays.push(eleObject.value);
-				if(start ===null||!!document.getSelection().toString()){
-					selectionvalue = document.getSelection().toString()
-					text = selectionvalue.split('\n').map((a,b)=>{return defaultvalue+a}).join('\n')
+				selectionvalue = document.getSelection().toString()
+				if(start ===null||!!selectionvalue){
+					arrays.push({value:eleObject.value,start:start,end:eleObject.selectionEnd});
+					
+					text = selectionvalue.split('\n').map(function(a){
+						return defaultvalue+a;
+					}).join('\n')
 					eleObject.setRangeText(text);
-					eleObject.value = eleObject.value;
-					arrays.push(eleObject.value);
+					// eleObject.value = eleObject.value;
+					return true;
 				}else{
 					end = eleObject.selectionEnd;
 					value = eleObject.value;
 					len  = value.length;
-					eleObject.value = value.substring(0,start)+defaultvalue+value.substring(end,len);
+					arrays.push({value:eleObject.value,start:start,end:eleObject.selectionEnd});
+					// eleObject.value = value.substring(0,start)+defaultvalue+value.substring(end,len);
+					eleObject.setRangeText(defaultvalue);
 					eleObject.selectionStart = end+defaultvalue.length;
 					eleObject.selectionEnd =end+defaultvalue.length;
 					eleObject.focus();
-					arrays.push(eleObject.value);
+					return true;
 				}
-				
+				arrays.push({value:eleObject.value,start:start});
 			}
 		}
 		attach(eleObject,'keydown',defaultcallback,false);
